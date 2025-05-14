@@ -1,0 +1,55 @@
+  # Sample configuration file for Spring Boot Starter Kit
+  starter-kit:
+    # Exception handling configuration
+    exception-handling:
+      enabled: true
+      log-exceptions: true
+      include-stack-trace: false  # Set to true in development environments only
+      enable-i18n: true
+      default-messages:
+        resource.notfound: "The requested resource was not found"
+        bad.request: "The request contains invalid parameters"
+        validation.error: "Validation error occurred"
+        internal.error: "An unexpected error occurred"
+
+    # Base entity configuration
+    base-entity:
+      enabled: true
+      enable-auditing: true
+      id-type: "LONG"  # Options: LONG, UUID
+
+    # Response utilities configuration
+    response:
+      enabled: true
+      include-timestamp: true
+
+    # Web configuration
+    web-config:
+      enabled: true
+      cors:
+        enabled: true
+        allowed-origins:
+          - "https://myapp.example.com"
+          - "https://admin.example.com"
+        allowed-methods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "PATCH"
+          - "OPTIONS"
+        allowed-headers:
+          - "*"
+        allow-credentials: true
+        max-age: 3600
+      compression:
+        enabled: true
+        min-response-size: "2KB"
+        mime-types:
+          - "text/html"
+          - "text/xml"
+          - "text/plain"
+          - "text/css"
+          - "text/javascript"
+          - "application/javascript"
+          - "application/json"
