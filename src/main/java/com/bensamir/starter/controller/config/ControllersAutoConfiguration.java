@@ -15,5 +15,4 @@ import org.springframework.web.bind.annotation.RestController;
 @ConditionalOnClass({RestController.class, JpaRepository.class})
 @ConditionalOnProperty(prefix = "starter-kit.controllers", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ControllersAutoConfiguration {
-    // No beans to register - just make available the base controller classes
 }

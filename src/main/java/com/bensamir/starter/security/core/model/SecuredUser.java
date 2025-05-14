@@ -11,7 +11,7 @@ public interface SecuredUser {
     /**
      * Gets the user's unique identifier.
      */
-    String getId();
+    String getUserId();
 
     /**
      * Gets the user's username or email.

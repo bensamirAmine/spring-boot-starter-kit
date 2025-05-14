@@ -38,7 +38,7 @@ public class UserPrincipal implements UserDetails {
                 .collect(Collectors.toSet());
 
         return new UserPrincipal(
-                user.getId(),
+                user.getUserId(),
                 user.getUsername(),
                 user.getPassword(),
                 authorities,

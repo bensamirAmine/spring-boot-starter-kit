@@ -73,7 +73,7 @@ public class DummySecurityUserService implements SecurityUserService {
         }
 
         @Override
-        public String getId() {
+        public String getUserId() {
             return id;
         }
 

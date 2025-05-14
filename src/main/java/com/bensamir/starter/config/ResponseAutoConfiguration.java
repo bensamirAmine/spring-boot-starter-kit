@@ -10,6 +10,4 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "starter-kit.response", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ResponseAutoConfiguration {
-    // Nothing to configure here - these are utility classes
-    // The auto-configuration ensures the feature can be conditionally enabled/disabled
 }

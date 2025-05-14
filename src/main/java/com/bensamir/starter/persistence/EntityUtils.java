@@ -1,4 +1,3 @@
-// src/main/java/com/bensamir/starter/persistence/EntityUtils.java
 package com.bensamir.starter.persistence;
 
 import jakarta.persistence.EntityManager;
