@@ -34,67 +34,103 @@ public class LoggingProperties {
         return json;
     }
 
+    /**
+     * Request logging configuration.
+     */
     public static class RequestLoggingProperties {
         private boolean enabled = true;
         private boolean includeHeaders = true;
         private boolean includePayload = true;
-        private boolean includeQueryString = true;
         private int maxPayloadLength = 10000;
-        private List<String> excludePaths = new ArrayList<>();
+        private String[] excludePaths = {"/actuator/**", "/swagger-ui/**", "/v3/api-docs/**"};
 
-        public RequestLoggingProperties() {
-            // Default exclude paths
-            excludePaths.add("/actuator/**");
-            excludePaths.add("/swagger-ui/**");
-            excludePaths.add("/v3/api-docs/**");
-        }
-
-        // Getters and setters
+        /**
+         * Returns whether request logging is enabled.
+         *
+         * @return true if request logging is enabled
+         */
         public boolean isEnabled() {
             return enabled;
         }
 
+        /**
+         * Sets whether request logging is enabled.
+         *
+         * @param enabled true to enable request logging
+         */
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
         }
 
+        /**
+         * Returns whether to include headers in request logs.
+         *
+         * @return true if headers should be included
+         */
         public boolean isIncludeHeaders() {
             return includeHeaders;
         }
 
+        /**
+         * Sets whether to include headers in request logs.
+         *
+         * @param includeHeaders true to include headers
+         */
         public void setIncludeHeaders(boolean includeHeaders) {
             this.includeHeaders = includeHeaders;
         }
 
+        /**
+         * Returns whether to include request and response payloads in logs.
+         *
+         * @return true if payloads should be included
+         */
         public boolean isIncludePayload() {
             return includePayload;
         }
 
+        /**
+         * Sets whether to include request and response payloads in logs.
+         *
+         * @param includePayload true to include payloads
+         */
         public void setIncludePayload(boolean includePayload) {
             this.includePayload = includePayload;
         }
 
-        public boolean isIncludeQueryString() {
-            return includeQueryString;
-        }
-
-        public void setIncludeQueryString(boolean includeQueryString) {
-            this.includeQueryString = includeQueryString;
-        }
-
+        /**
+         * Returns the maximum payload length to log.
+         *
+         * @return maximum payload length in bytes
+         */
         public int getMaxPayloadLength() {
             return maxPayloadLength;
         }
 
+        /**
+         * Sets the maximum payload length to log.
+         *
+         * @param maxPayloadLength maximum payload length in bytes
+         */
         public void setMaxPayloadLength(int maxPayloadLength) {
             this.maxPayloadLength = maxPayloadLength;
         }
 
-        public List<String> getExcludePaths() {
+        /**
+         * Returns the paths to exclude from request logging.
+         *
+         * @return array of path patterns to exclude
+         */
+        public String[] getExcludePaths() {
             return excludePaths;
         }
 
-        public void setExcludePaths(List<String> excludePaths) {
+        /**
+         * Sets the paths to exclude from request logging.
+         *
+         * @param excludePaths array of path patterns to exclude
+         */
+        public void setExcludePaths(String[] excludePaths) {
             this.excludePaths = excludePaths;
         }
     }
@@ -135,54 +171,107 @@ public class LoggingProperties {
         }
     }
 
+    /**
+     * MDC context configuration.
+     */
     public static class MdcProperties {
         private boolean enabled = true;
         private String requestIdKey = "requestId";
         private String userIdKey = "userId";
-        private boolean includeIpAddress = true;
-        private String ipAddressKey = "clientIp";
+        private boolean includeClientIp = true;
+        private boolean includeUserRoles = false;
 
-        // Getters and setters
+        /**
+         * Returns whether MDC context tracking is enabled.
+         *
+         * @return true if MDC context is enabled
+         */
         public boolean isEnabled() {
             return enabled;
         }
 
+        /**
+         * Sets whether MDC context tracking is enabled.
+         *
+         * @param enabled true to enable MDC context
+         */
         public void setEnabled(boolean enabled) {
             this.enabled = enabled;
         }
 
+        /**
+         * Returns the MDC key for request IDs.
+         *
+         * @return request ID key
+         */
         public String getRequestIdKey() {
             return requestIdKey;
         }
 
+        /**
+         * Sets the MDC key for request IDs.
+         *
+         * @param requestIdKey request ID key
+         */
         public void setRequestIdKey(String requestIdKey) {
             this.requestIdKey = requestIdKey;
         }
 
+        /**
+         * Returns the MDC key for user IDs.
+         *
+         * @return user ID key
+         */
         public String getUserIdKey() {
             return userIdKey;
         }
 
+        /**
+         * Sets the MDC key for user IDs.
+         *
+         * @param userIdKey user ID key
+         */
         public void setUserIdKey(String userIdKey) {
             this.userIdKey = userIdKey;
         }
 
-        public boolean isIncludeIpAddress() {
-            return includeIpAddress;
+        /**
+         * Returns whether to include client IP in MDC context.
+         *
+         * @return true if client IP should be included
+         */
+        public boolean isIncludeClientIp() {
+            return includeClientIp;
         }
 
-        public void setIncludeIpAddress(boolean includeIpAddress) {
-            this.includeIpAddress = includeIpAddress;
+        /**
+         * Sets whether to include client IP in MDC context.
+         *
+         * @param includeClientIp true to include client IP
+         */
+        public void setIncludeClientIp(boolean includeClientIp) {
+            this.includeClientIp = includeClientIp;
         }
 
-        public String getIpAddressKey() {
-            return ipAddressKey;
+        /**
+         * Returns whether to include user roles in MDC context.
+         *
+         * @return true if user roles should be included
+         */
+        public boolean isIncludeUserRoles() {
+            return includeUserRoles;
         }
 
-        public void setIpAddressKey(String ipAddressKey) {
-            this.ipAddressKey = ipAddressKey;
+        /**
+         * Sets whether to include user roles in MDC context.
+         *
+         * @param includeUserRoles true to include user roles
+         */
+        public void setIncludeUserRoles(boolean includeUserRoles) {
+            this.includeUserRoles = includeUserRoles;
         }
     }
+
 
     public static class JsonLoggingProperties {
         private boolean enabled = true;

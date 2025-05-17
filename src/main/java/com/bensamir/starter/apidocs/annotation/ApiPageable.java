@@ -10,7 +10,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to document pageable parameters in OpenAPI.
+ * Annotation to document pageable parameters in OpenAPI documentation.
+ * <p>
+ * This annotation simplifies documenting Spring Data's Pageable parameters
+ * in OpenAPI documentation.
+ * <p>
+ * Usage example:
+ * <pre>
+ * &#64;GetMapping("/users")
+ * &#64;ApiPageable
+ * public ResponseEntity&lt;ApiResponse&lt;Page&lt;UserDTO&gt;&gt;&gt; getUsers(Pageable pageable) {
+ *     // Implementation
+ * }
+ * </pre>
  */
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,4 +33,5 @@ import java.lang.annotation.Target;
 @Parameter(in = ParameterIn.QUERY, name = "sort", description = "Sorting criteria (e.g., id,desc)",
         schema = @Schema(type = "string"))
 public @interface ApiPageable {
+    // This is a marker annotation with parameters defined in annotations above
 }

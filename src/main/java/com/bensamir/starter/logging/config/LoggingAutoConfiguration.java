@@ -1,66 +1,61 @@
-// src/main/java/com/bensamir/starter/logging/config/LoggingAutoConfiguration.java
 package com.bensamir.starter.logging.config;
 
-import com.bensamir.starter.logging.aspect.LogExecutionAspect;
-import com.bensamir.starter.logging.aspect.PerformanceLoggingAspect;
 import com.bensamir.starter.logging.filter.MdcFilter;
-import com.bensamir.starter.logging.filter.RequestResponseLoggingFilter;
+import com.bensamir.starter.logging.filter.RequestLoggingFilter;
 import com.bensamir.starter.properties.StarterKitProperties;
-import jakarta.annotation.PostConstruct;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.core.env.Environment;
 
 /**
- * Auto-configuration for logging.
+ * Auto-configuration for enterprise-grade logging infrastructure.
+ * <p>
+ * This configuration provides:
+ * <ul>
+ *   <li>MDC context for request correlation and tracing</li>
+ *   <li>Detailed request/response logging</li>
+ *   <li>Thread context propagation utilities</li>
+ * </ul>
+ * <p>
+ * All components are configurable via properties:
+ * <pre>
+ * starter-kit:
+ *   logging:
+ *     enabled: true
+ *     mdc:
+ *       enabled: true
+ *       request-id-key: "requestId"
+ *       user-id-key: "userId"
+ *       include-client-ip: true
+ *       include-user-roles: false
+ *     request:
+ *       enabled: true
+ *       include-headers: true
+ *       include-payload: true
+ *       max-payload-length: 10000
+ *       exclude-paths: ["/actuator/**", "/swagger-ui/**"]
+ * </pre>
  */
 @Configuration
+@ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "starter-kit.logging", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class LoggingAutoConfiguration {
 
-    private final StarterKitProperties properties;
-    private final Environment environment;
-
-    public LoggingAutoConfiguration(StarterKitProperties properties, Environment environment) {
-        this.properties = properties;
-        this.environment = environment;
-    }
-
     /**
-     * Initializes logging configuration by setting system properties.
-     */
-    @PostConstruct
-    public void initLoggingConfig() {
-        // Set application name for logging
-        System.setProperty("LOG_APP_NAME",
-                environment.getProperty("spring.application.name", "application"));
-
-        // Set JSON logging properties
-        System.setProperty("LOG_INCLUDE_LOGGER_NAME",
-                String.valueOf(properties.getLogging().getJson().isIncludeLoggerName()));
-        System.setProperty("LOG_INCLUDE_THREAD_NAME",
-                String.valueOf(properties.getLogging().getJson().isIncludeThreadName()));
-        System.setProperty("LOG_INCLUDE_STACKTRACE",
-                String.valueOf(properties.getLogging().getJson().isIncludeStacktrace()));
-
-        // Configure pretty print via system property
-        System.setProperty("LOG_PRETTY_PRINT",
-                String.valueOf(properties.getLogging().getJson().isPrettyPrint()));
-    }
-
-    /**
-     * MDC filter registration.
+     * Creates an MDC filter for request context tracking.
+     * <p>
+     * This filter is registered with the highest precedence to ensure
+     * MDC context is available for all subsequent filters.
+     *
+     * @param properties the starter kit properties
+     * @return a filter registration bean
      */
     @Bean
-    @ConditionalOnWebApplication
     @ConditionalOnProperty(prefix = "starter-kit.logging.mdc", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public FilterRegistrationBean<MdcFilter> mdcFilter() {
+    public FilterRegistrationBean<MdcFilter> mdcFilter(StarterKitProperties properties) {
         FilterRegistrationBean<MdcFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new MdcFilter(properties));
         registrationBean.addUrlPatterns("/*");
@@ -69,37 +64,22 @@ public class LoggingAutoConfiguration {
     }
 
     /**
-     * Request-response logging filter registration.
+     * Creates a request logging filter.
+     * <p>
+     * This filter is registered with a low precedence to ensure it can
+     * capture the complete request/response cycle, including any modifications
+     * made by intermediate filters.
+     *
+     * @param properties the starter kit properties
+     * @return a filter registration bean
      */
     @Bean
-    @ConditionalOnWebApplication
     @ConditionalOnProperty(prefix = "starter-kit.logging.request", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public FilterRegistrationBean<RequestResponseLoggingFilter> requestResponseLoggingFilter() {
-        FilterRegistrationBean<RequestResponseLoggingFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new RequestResponseLoggingFilter(properties));
+    public FilterRegistrationBean<RequestLoggingFilter> requestLoggingFilter(StarterKitProperties properties) {
+        FilterRegistrationBean<RequestLoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new RequestLoggingFilter(properties));
         registrationBean.addUrlPatterns("/*");
         registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE - 10);
         return registrationBean;
-    }
-
-    /**
-     * Performance logging aspect.
-     */
-    @Bean
-    @ConditionalOnClass(name = "org.aspectj.lang.annotation.Aspect")
-    @ConditionalOnProperty(prefix = "starter-kit.logging.performance", name = "enabled", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnMissingBean
-    public PerformanceLoggingAspect performanceLoggingAspect() {
-        return new PerformanceLoggingAspect(properties);
-    }
-
-    /**
-     * Log execution aspect.
-     */
-    @Bean
-    @ConditionalOnClass(name = "org.aspectj.lang.annotation.Aspect")
-    @ConditionalOnMissingBean
-    public LogExecutionAspect logExecutionAspect() {
-        return new LogExecutionAspect();
     }
 }

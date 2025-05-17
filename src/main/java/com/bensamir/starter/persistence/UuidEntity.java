@@ -6,13 +6,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
- * Base entity with auto-incremented Long ID.
+ * Base entity with UUID primary key.
  * <p>
  * This class provides:
  * <ul>
- *   <li>Auto-incremented Long ID field</li>
+ *   <li>Auto-generated UUID ID field</li>
  *   <li>All auditing fields from AuditedEntity</li>
  *   <li>Proper equals, hashCode, and toString implementations</li>
  * </ul>
@@ -20,47 +21,47 @@ import java.util.Objects;
  * Usage example:
  * <pre>
  * &#64;Entity
- * &#64;Table(name = "products")
- * public class Product extends BaseEntity {
- *     private String name;
- *     private BigDecimal price;
+ * &#64;Table(name = "orders")
+ * public class Order extends UuidEntity {
+ *     private LocalDate orderDate;
+ *     private String status;
  *
  *     // Getters and setters
  * }
  * </pre>
  */
 @MappedSuperclass
-public abstract class BaseEntity extends AuditedEntity {
+public abstract class UuidEntity extends AuditedEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     /**
-     * Gets the primary key.
+     * Gets the UUID primary key.
      *
-     * @return the ID
+     * @return the UUID
      */
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
     /**
-     * Sets the primary key.
+     * Sets the UUID primary key.
      *
-     * @param id the ID
+     * @param id the UUID
      */
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BaseEntity)) return false;
+        if (!(o instanceof UuidEntity)) return false;
 
-        BaseEntity that = (BaseEntity) o;
+        UuidEntity that = (UuidEntity) o;
 
         // If the IDs are null, the entities are not equal
         if (id == null) return false;

@@ -3,6 +3,9 @@ package com.bensamir.starter.apidocs.properties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Configuration properties for API documentation.
+ */
 public class ApiDocsProperties {
     private boolean enabled = true;
     private String title = "API Documentation";
@@ -13,9 +16,16 @@ public class ApiDocsProperties {
     private final LicenseInfo license = new LicenseInfo();
     private final List<ServerInfo> servers = new ArrayList<>();
 
+    /**
+     * Creates a new API docs properties with default values.
+     */
     public ApiDocsProperties() {
         // Add default server
         servers.add(new ServerInfo("http://localhost:8080", "Local Development Server"));
+
+        // Set default license
+        license.setName("MIT License");
+        license.setUrl("https://opensource.org/licenses/MIT");
     }
 
     // Getters and setters
@@ -71,7 +81,9 @@ public class ApiDocsProperties {
         return servers;
     }
 
-    // Nested property classes
+    /**
+     * Contact information for the API.
+     */
     public static class ContactInfo {
         private String name = "";
         private String url = "";
@@ -103,6 +115,9 @@ public class ApiDocsProperties {
         }
     }
 
+    /**
+     * License information for the API.
+     */
     public static class LicenseInfo {
         private String name = "MIT License";
         private String url = "https://opensource.org/licenses/MIT";
@@ -125,13 +140,25 @@ public class ApiDocsProperties {
         }
     }
 
+    /**
+     * Server information for the API.
+     */
     public static class ServerInfo {
         private String url;
         private String description;
 
+        /**
+         * Creates a new server info.
+         */
         public ServerInfo() {
         }
 
+        /**
+         * Creates a new server info with URL and description.
+         *
+         * @param url the server URL
+         * @param description the server description
+         */
         public ServerInfo(String url, String description) {
             this.url = url;
             this.description = description;

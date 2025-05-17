@@ -1,24 +1,34 @@
 package com.bensamir.starter.security.config;
 
 import com.bensamir.starter.properties.StarterKitProperties;
-import com.bensamir.starter.security.core.service.DummySecurityUserService;
-import com.bensamir.starter.security.core.service.SecurityUserService;
 import com.bensamir.starter.security.jwt.filter.JwtAuthenticationFilter;
 import com.bensamir.starter.security.jwt.service.JwtTokenService;
-import com.bensamir.starter.security.web.config.WebSecurityConfig;
-import com.bensamir.starter.security.web.controller.AuthController;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Auto-configuration for security module.
+ * Auto-configuration for JWT security components.
+ * <p>
+ * This configuration provides the essential components for JWT-based authentication:
+ * <ul>
+ *   <li>JWT token service for generating and validating tokens</li>
+ *   <li>JWT authentication filter for processing token-based authentication</li>
+ *   <li>Password encoder for secure password hashing</li>
+ * </ul>
+ * <p>
+ * To use this in your application:
+ * <ol>
+ *   <li>Provide a UserDetailsService bean to load user data</li>
+ *   <li>Configure security properties in application.yml/properties</li>
+ *   <li>Create controllers for authentication as needed</li>
+ * </ol>
  */
 @Configuration
 @ConditionalOnWebApplication
@@ -26,7 +36,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityAutoConfiguration {
 
     /**
-     * Password encoder bean.
+     * Creates a password encoder for secure password hashing.
+     *
+     * @return the password encoder
      */
     @Bean
     @ConditionalOnMissingBean
@@ -35,17 +47,10 @@ public class SecurityAutoConfiguration {
     }
 
     /**
-     * Security user service bean.
-     * This will be replaced by the application's implementation.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public SecurityUserService securityUserService(PasswordEncoder passwordEncoder) {
-        return new DummySecurityUserService(passwordEncoder);
-    }
-
-    /**
-     * JWT token service bean.
+     * Creates a JWT token service.
+     *
+     * @param properties the starter kit properties
+     * @return the JWT token service
      */
     @Bean
     @ConditionalOnMissingBean
@@ -54,45 +59,22 @@ public class SecurityAutoConfiguration {
     }
 
     /**
-     * JWT authentication filter bean.
+     * Creates a JWT authentication filter.
+     * <p>
+     * This bean is only created if a UserDetailsService is available.
+     *
+     * @param tokenService the JWT token service
+     * @param userDetailsService the user details service
+     * @param properties the starter kit properties
+     * @return the JWT authentication filter
      */
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnBean(UserDetailsService.class)
     public JwtAuthenticationFilter jwtAuthenticationFilter(
-            JwtTokenService jwtTokenService,
-            SecurityUserService securityUserService,
+            JwtTokenService tokenService,
+            UserDetailsService userDetailsService,
             StarterKitProperties properties) {
-        return new JwtAuthenticationFilter(jwtTokenService, securityUserService, properties);
-    }
-
-    /**
-     * Web security configuration bean.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public WebSecurityConfig webSecurityConfig(
-            StarterKitProperties properties,
-            JwtAuthenticationFilter jwtAuthenticationFilter) {
-        return new WebSecurityConfig(properties, jwtAuthenticationFilter);
-    }
-
-    /**
-     * Authentication manager bean.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    /**
-     * Authentication controller bean.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public AuthController authController(
-            AuthenticationManager authenticationManager,
-            JwtTokenService jwtTokenService) {
-        return new AuthController(authenticationManager, jwtTokenService);
+        return new JwtAuthenticationFilter(tokenService, userDetailsService, properties);
     }
 }
