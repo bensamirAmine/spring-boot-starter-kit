@@ -42,7 +42,7 @@ public class CompressionConfig implements WebServerFactoryCustomizer<Configurabl
         if (compressionProps.isEnabled()) {
             Compression compression = new Compression();
             compression.setEnabled(true);
-            compression.setMinResponseSize(compressionProps.getMinResponseSize());
+            compression.setMinResponseSize(DataSize.ofBytes(compressionProps.getMinResponseSize()));
             compression.setMimeTypes(compressionProps.getMimeTypes());
             factory.setCompression(compression);
         }

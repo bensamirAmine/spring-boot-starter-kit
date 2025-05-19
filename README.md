@@ -1,172 +1,214 @@
 # Spring Boot Starter Kit
 
-A comprehensive collection of reusable components for Spring Boot applications that provides standardized implementations of common patterns and reduces boilerplate code.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Maven Central](https://img.shields.io/maven-central/v/com.bensamir/spring-boot-starter-kit.svg)](https://search.maven.org/artifact/com.bensamir/spring-boot-starter-kit)
+[![Java 17+](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5+-green.svg)](https://spring.io/projects/spring-boot)
 
-## Features
+A comprehensive, production-ready Spring Boot starter kit with enterprise-grade features, designed to accelerate application development while enforcing best practices.
 
-The starter kit includes the following components, each of which can be enabled or disabled independently:
+## 📋 Table of Contents
 
-### Core Features
+- [Features](#-features)
+- [Getting Started](#-getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+- [Usage](#-usage)
+   - [Basic Usage](#basic-usage)
+   - [Component Overview](#component-overview)
+- [Configuration](#-configuration)
+   - [Common Properties](#common-properties)
+   - [Exception Handling](#exception-handling)
+   - [API Documentation](#api-documentation)
+   - [Security/JWT](#securityjwt)
+   - [Logging](#logging)
+   - [Web Configuration](#web-configuration)
+   - [Persistence](#persistence)
+- [API Response Format](#-api-response-format)
+- [Exception Handling](#-exception-handling)
+- [Base Entities](#-base-entities)
+- [Security & JWT](#-security--jwt)
+- [Logging](#-logging)
+- [API Documentation](#-api-documentation)
+- [Examples](#-examples)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-#### 1. Exception Handling
+## 🔥 Features
 
-Provides a standardized way to handle and respond to exceptions across your application.
+- **Unified API Response Format**: Consistent response structure with support for data, metadata, error handling, and pagination
+- **Comprehensive Exception Handling**: Standardized error responses, internationalization support, and detailed validation errors
+- **Base Entities & Persistence Utilities**: Audited entities with created/modified timestamps, optimistic locking, and UUID support
+- **Security & JWT Authentication**: Ready-to-use JWT authentication with token generation, validation, and Spring Security configuration
+- **API Documentation**: Integrated Swagger/OpenAPI documentation with customizable information and grouping
+- **Enterprise Logging**: Request/response logging, MDC context for distributed tracing, and performance monitoring
+- **Web Configuration**: CORS support, response compression, character encoding, and other essentials
+- **Highly Configurable**: Fine-grained control via properties with sensible defaults
 
-- Global exception handler with consistent error responses
-- Standard exception types (ResourceNotFoundException, BadRequestException, etc.)
-- Validation error formatting
-- Customizable error messages
-- Internationalization (i18n) support
-- Error logging with configurable levels
+## 🚀 Getting Started
 
-#### 2. Base Persistence Layer
+### Prerequisites
 
-Includes base entity classes and auditing support for JPA.
+- Java 17 or higher
+- Maven or Gradle
+- Spring Boot 3.4.x or higher
 
-- Common fields (id, created_at, updated_at, version)
-- Support for both numeric and UUID identifiers
-- Automatic auditing of creation and modification timestamps
-- Optimistic locking with version tracking
-- Utility methods for entity operations
+### Installation
 
-#### 3. Response Utilities
-
-Standardizes API responses for a consistent experience.
-
-- Unified response format for all API endpoints
-- Pagination support with metadata
-- Success/error response helpers
-- Fluent builder API for creating responses
-
-#### 4. Web Configuration
-
-Provides sensible defaults for web-related configuration.
-
-- CORS configuration with extensive customization options
-- Response compression
-- Character encoding
-- Common HTTP headers
-
-#### 5. Security Framework
-
-Complete authentication and authorization solution.
-
-- JWT token-based authentication
-- Role-based access control
-- Custom security annotations (@RequiresAdmin, @RequiresUser)
-- Integration with Spring Security
-- Configurable public/private endpoints
-
-#### 6. Base Controllers
-
-Standardized CRUD operations for RESTful APIs.
-
-- Abstract controllers with common REST endpoints
-- Entity/DTO mapping support
-- Pagination handling
-- Integration with exception handling and response utilities
-
-#### 7. API Documentation
-
-Automatic OpenAPI documentation generation.
-
-- Swagger UI integration
-- Customizable API information
-- API versioning support
-- Pre-configured documentation groups
-
-#### 8. Logging Configuration
-
-Centralized logging with context tracking.
-
-- Request/response logging
-- Performance monitoring
-- MDC context for request tracking
-- Structured JSON logging
-
-### Upcoming Features (Roadmap)
-
-#### 9. Advanced Caching
-
-- Multi-level cache configuration
-- Cache key generation
-- TTL management
-- Cache invalidation strategies
-
-#### 10. Event Publishing
-
-- Domain event publishing
-- Event listeners and handlers
-- Asynchronous event processing
-
-## Installation
-
-Add the following dependency to your `pom.xml`:
+#### Maven
 
 ```xml
 <dependency>
     <groupId>com.bensamir</groupId>
     <artifactId>spring-boot-starter-kit</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
-## Usage
+#### Gradle
+
+```groovy
+implementation 'com.bensamir:spring-boot-starter-kit:0.2.0'
+```
+
+## 🔍 Usage
 
 ### Basic Usage
 
-Most features work automatically with sensible defaults. Simply add the dependency to your project, and the components will be auto-configured.
+Just add the dependency to your project, and the starter kit will automatically configure all components.
 
-### Configuration
+```java
+@SpringBootApplication
+public class MyApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class, args);
+    }
+}
+```
 
-All components can be configured using properties in your `application.yml` or `application.properties` file:
+### Component Overview
+
+The starter kit includes several auto-configured components:
+
+1. **`StarterKitAutoConfiguration`**: Main entry point for auto-configuration
+2. **`ExceptionHandlingAutoConfiguration`**: Sets up global exception handling and i18n support
+3. **`SecurityAutoConfiguration`**: Configures JWT security components
+4. **`PersistenceAutoConfiguration`**: Sets up auditing and base entity support
+5. **`WebConfigAutoConfiguration`**: Configures CORS, compression, and other web settings
+6. **`ApiDocsAutoConfiguration`**: Sets up OpenAPI/Swagger documentation
+7. **`ResponseAutoConfiguration`**: Configures JSON serialization for API responses
+8. **`LoggingAutoConfiguration`**: Sets up request logging, MDC context, and other logging features
+
+## ⚙️ Configuration
+
+The starter kit provides extensive configuration options via properties. All properties have sensible defaults and are prefixed with `starter-kit`.
+
+### Common Properties
+
+The following properties can be configured in your `application.yml` or `application.properties` file:
 
 ```yaml
 starter-kit:
-  # Exception handling configuration
+  # Component-specific configurations - see below
+```
+
+### Exception Handling
+
+```yaml
+starter-kit:
   exception-handling:
-    enabled: true
-    log-exceptions: true
-    include-stack-trace: false
-    enable-i18n: false
-    default-messages:
+    enabled: true                 # Enable/disable exception handling (default: true)
+    log-exceptions: true          # Log exceptions (default: true)
+    include-stack-trace: false    # Include stack traces in responses (default: false)
+    enable-i18n: false            # Enable internationalization of error messages (default: false)
+    default-messages:             # Default error messages
       resource.notfound: "Resource not found"
-      bad.request: "Bad request"
-      validation.error: "Validation error"
-      internal.error: "An unexpected error occurred"
+      # ... other message keys
+```
 
-  # Base entity configuration
-  base-entity:
-    enabled: true
-    enable-auditing: true
-    id-type: "LONG"  # LONG or UUID
+### API Documentation
 
-  # Response utilities configuration
-  response:
-    enabled: true
-    include-timestamp: true
+```yaml
+starter-kit:
+  api-docs:
+    enabled: true                 # Enable/disable API docs (default: true)
+    title: "API Documentation"    # API title (default: "API Documentation")
+    description: "API Documentation generated by Spring Boot Starter Kit"
+    version: "1.0"                # API version (default: "1.0")
+    contact:
+      name: "Contact Name"        # Contact name
+      email: "contact@example.com" # Contact email
+      url: "https://example.com"  # Contact URL
+    license:
+      name: "MIT License"         # License name (default: "MIT License")
+      url: "https://opensource.org/licenses/MIT" # License URL
+    servers:
+      - url: "http://localhost:8080"  # Server URL
+        description: "Local Development Server" # Server description
+```
 
-  # Web configuration
+### Security/JWT
+
+```yaml
+starter-kit:
+  security:
+    enabled: true                 # Enable/disable security (default: true)
+    jwt:
+      secret-key: "${JWT_SECRET:your-secret-key}" # JWT secret key (required)
+      token-expiration-ms: 3600000 # Token expiration in milliseconds (default: 1 hour)
+      issuer: "spring-boot-starter-kit" # Token issuer (default: "spring-boot-starter-kit")
+      token-prefix: "Bearer "     # Token prefix (default: "Bearer ")
+      header-name: "Authorization" # Header name (default: "Authorization")
+    auth:
+      public-paths:               # Paths that don't require authentication
+        - "/api/auth/**"
+        - "/api/public/**"
+        - "/swagger-ui/**"
+        - "/v3/api-docs/**"
+      stateless: true             # Use stateless sessions (default: true)
+      csrf-enabled: false         # Enable CSRF protection (default: false)
+```
+
+### Logging
+
+```yaml
+starter-kit:
+  logging:
+    enabled: true                 # Enable/disable logging features (default: true)
+    mdc:
+      enabled: true               # Enable MDC context tracking (default: true)
+      request-id-key: "requestId" # MDC key for request IDs (default: "requestId")
+      user-id-key: "userId"       # MDC key for user IDs (default: "userId")
+      include-client-ip: true     # Include client IP in MDC (default: true)
+      include-user-roles: false   # Include user roles in MDC (default: false)
+    request:
+      enabled: true               # Enable request logging (default: true)
+      include-headers: true       # Include headers in logs (default: true)
+      include-payload: true       # Include request/response bodies in logs (default: true)
+      max-payload-length: 10000   # Maximum payload length to log (default: 10000)
+      exclude-paths:              # Paths to exclude from logging
+        - "/actuator/**"
+        - "/swagger-ui/**"
+        - "/v3/api-docs/**"
+```
+
+### Web Configuration
+
+```yaml
+starter-kit:
   web-config:
-    enabled: true
+    enabled: true                 # Enable/disable web configuration (default: true)
     cors:
-      enabled: true
-      allowed-origins:
-        - "*"
-      allowed-methods:
-        - "GET"
-        - "POST"
-        - "PUT"
-        - "DELETE"
-        - "OPTIONS"
-      allowed-headers:
-        - "*"
-      allow-credentials: true
-      max-age: 3600
+      enabled: true               # Enable CORS (default: true)
+      allowed-origins: ["*"]      # Allowed origins (default: ["*"])
+      allowed-methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"] # Allowed methods
+      allowed-headers: ["*"]      # Allowed headers (default: ["*"])
+      allow-credentials: true     # Allow credentials (default: true)
+      max-age: 3600               # Max age in seconds (default: 3600)
     compression:
-      enabled: true
-      min-response-size: "2KB"
-      mime-types:
+      enabled: true               # Enable response compression (default: true)
+      min-response-size: 2048     # Minimum size to compress (default: 2048 bytes)
+      mime-types:                 # MIME types to compress
         - "text/html"
         - "text/xml"
         - "text/plain"
@@ -174,163 +216,100 @@ starter-kit:
         - "text/javascript"
         - "application/javascript"
         - "application/json"
-  
-  # Security configuration
-  security:
-    enabled: true
-    jwt:
-      secret-key: "your-very-secure-secret-key-here"
-      access-token-expiration-ms: 900000  # 15 minutes
-      refresh-token-expiration-ms: 2592000000  # 30 days
-      issuer: "spring-boot-starter-kit"
-    auth:
-      public-paths:
-        - "/api/auth/**"
-        - "/api/public/**"
-        - "/swagger-ui/**"
-        - "/v3/api-docs/**"
-      stateless: true
-      csrf-enabled: false
-  
-  # Base controllers configuration
-  controllers:
-    enabled: true
-    default-page-size: "20"
-    default-sort-direction: "asc"
-  
-  # API documentation configuration
-  api-docs:
-    enabled: true
-    title: "API Documentation"
-    description: "API Documentation generated by Spring Boot Starter Kit"
-    version: "1.0"
-    contact:
-      name: "API Support"
-      email: "support@example.com"
-    servers:
-      - url: "http://localhost:8080"
-        description: "Local Development Server"
-  
-  # Logging configuration
-  logging:
-    enabled: true
-    request:
-      enabled: true
-      include-headers: true
-      include-payload: true
-      exclude-paths:
-        - "/actuator/**"
-        - "/swagger-ui/**"
-        - "/v3/api-docs/**"
-    performance:
-      enabled: true
-      slow-execution-threshold-ms: 1000
-      include-packages:
-        - "com.example"
-    mdc:
-      enabled: true
-      request-id-key: "requestId"
-      user-id-key: "userId"
-    json:
-      enabled: true
-      include-logger-name: true
-      include-thread-name: true
+        - "application/xml"
 ```
 
-## Component Usage Examples
+### Persistence
 
-### Exception Handling
-
-1. Use predefined exceptions in your code:
-
-```java
-// Throw a not found exception
-throw new ResourceNotFoundException("User", "id", userId);
-
-// Throw a bad request exception
-throw new BadRequestException("Invalid input data");
+```yaml
+starter-kit:
+  base-entity:
+    enabled: true                 # Enable/disable persistence support (default: true)
+    enable-auditing: true         # Enable entity auditing (default: true)
 ```
 
-2. Create custom exceptions by extending `BaseException`:
+## 📊 API Response Format
 
-```java
-public class PaymentFailedException extends BaseException {
-    public PaymentFailedException(String message) {
-        super(message, "PAYMENT_FAILED");
-    }
+The starter kit provides a standardized API response format for all endpoints:
+
+```json
+{
+  "success": true,
+  "data": {
+    // Your response data
+  },
+  "timestamp": "2023-06-15T10:30:45.123Z",
+  "meta": {
+    // Optional metadata
+  }
 }
 ```
 
-3. Customizing error messages with i18n:
+For paginated responses:
 
-```
-# messages/error-messages_en.properties
-resource.notfound=Resource not found
-bad.request=Bad request
-
-# messages/error-messages_fr.properties
-resource.notfound=Ressource non trouvée
-bad.request=Requête invalide
-```
-
-### Base Persistence Layer
-
-1. Create entities by extending the base classes:
-
-```java
-@Entity
-@Table(name = "users")
-public class User extends BaseEntity {
-    @Column(nullable = false, unique = true)
-    private String email;
-    
-    private String name;
-    
-    // Getters and setters
+```json
+{
+  "success": true,
+  "data": {
+    "content": [
+      // Your page content
+    ],
+    "totalElements": 100,
+    "totalPages": 10,
+    "page": 0,
+    "size": 10,
+    "first": true,
+    "last": false
+  },
+  "timestamp": "2023-06-15T10:30:45.123Z",
+  "meta": {
+    "totalElements": 100,
+    "totalPages": 10,
+    "page": 0,
+    "size": 10
+  }
 }
 ```
 
-2. For UUID-based entities:
+For error responses:
 
-```java
-@Entity
-@Table(name = "orders")
-public class Order extends BaseUuidEntity {
-    @ManyToOne
-    private User user;
-    
-    @Column(nullable = false)
-    private BigDecimal amount;
-    
-    // Getters and setters
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "User not found with id: 123",
+    "detail": "Additional error details"
+  },
+  "timestamp": "2023-06-15T10:30:45.123Z"
 }
 ```
 
-### Response Utilities
+### Using the Response Builder
 
-Use the `ResponseEntityBuilder` to create standardized responses:
+The starter kit provides a convenient `ResponseEntityBuilder` to create standardized responses:
 
 ```java
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDto>> getUser(@PathVariable Long id) {
-        UserDto user = userService.findById(id);
+    public ResponseEntity<ApiResponse<UserDTO>> getUser(@PathVariable Long id) {
+        UserDTO user = userService.findById(id);
         return ResponseEntityBuilder.success(user);
     }
     
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserDto>> createUser(@RequestBody @Valid UserDto userDto) {
-        UserDto createdUser = userService.create(userDto);
-        return ResponseEntityBuilder.created(createdUser);
+    @GetMapping
+    public ResponseEntity<ApiResponse<PageResponse<UserDTO>>> getUsers(Pageable pageable) {
+        Page<UserDTO> users = userService.findAll(pageable);
+        return ResponseEntityBuilder.page(users);
     }
     
-    @GetMapping
-    public ResponseEntity<ApiResponse<PageResponse<UserDto>>> getAllUsers(Pageable pageable) {
-        Page<UserDto> users = userService.findAll(pageable);
-        return ResponseEntityBuilder.page(users);
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserDTO user) {
+        UserDTO created = userService.create(user);
+        return ResponseEntityBuilder.created(created);
     }
     
     @DeleteMapping("/{id}")
@@ -341,14 +320,377 @@ public class UserController {
 }
 ```
 
-### Security Framework
+## 🚨 Exception Handling
 
-1. Implement the `SecuredUser` interface in your user entity:
+The starter kit provides a comprehensive exception handling framework:
+
+### Standard Exception Classes
+
+- `ResourceNotFoundException` - For 404 Not Found responses
+- `BadRequestException` - For 400 Bad Request responses
+- `UnauthorizedException` - For 401 Unauthorized responses
+- `ForbiddenException` - For 403 Forbidden responses
+- `ConflictException` - For 409 Conflict responses
+
+### Using Custom Exceptions
+
+```java
+@Service
+public class UserService {
+    
+    public UserDTO findById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    }
+    
+    public UserDTO create(UserDTO userDto) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new ConflictException("User already exists with email: " + userDto.getEmail());
+        }
+        // Create user logic
+    }
+}
+```
+
+### Internationalization Support
+
+To enable i18n for error messages:
+
+1. Set `starter-kit.exception-handling.enable-i18n` to `true`
+2. Create a `messages/error-messages.properties` file (and locale variants)
+
+```properties
+# messages/error-messages.properties
+resource.notfound=Resource not found
+resource.notfound.user=User not found with {0}: {1}
+```
+
+## 📝 Base Entities
+
+The starter kit provides base entity classes to simplify entity creation:
+
+### Using BaseEntity (with Long ID)
+
+```java
+@Entity
+@Table(name = "products")
+public class Product extends BaseEntity {
+    
+    private String name;
+    private BigDecimal price;
+    
+    // Getters and setters
+}
+```
+
+### Using UuidEntity (with UUID ID)
+
+```java
+@Entity
+@Table(name = "orders")
+public class Order extends UuidEntity {
+    
+    private LocalDate orderDate;
+    private String status;
+    
+    // Getters and setters
+}
+```
+
+### Auditing Fields
+
+Both base entities include the following auditing fields:
+
+- `createdAt` - Creation timestamp
+- `updatedAt` - Last update timestamp
+- `createdBy` - User who created the entity
+- `updatedBy` - User who last updated the entity
+- `version` - Optimistic locking version
+
+## 🔒 Security & JWT
+
+The starter kit provides a ready-to-use JWT authentication system:
+
+### Implementing Authentication
+
+1. Create a user details service:
+
+```java
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
+    
+    private final UserRepository userRepository;
+    
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                .map(user -> new User(
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                                .collect(Collectors.toList())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+    }
+}
+```
+
+2. Create an authentication controller:
+
+```java
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenService jwtTokenService;
+    private final UserDetailsService userDetailsService;
+    
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody AuthRequest request) {
+        // Authenticate user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        
+        // Generate token
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = jwtTokenService.generateToken(userDetails);
+        
+        // Return response
+        AuthResponse response = new AuthResponse(token);
+        return ResponseEntityBuilder.success(response);
+    }
+}
+```
+
+## 📋 API Documentation
+
+The starter kit integrates Swagger/OpenAPI for API documentation:
+
+### OpenAPI Annotations
+
+Use the provided annotations to document your API:
+
+#### DocumentPage Documentation
+
+```java
+@RestController
+@RequestMapping("/api/users")
+@ApiResponseWrapper // Documents standard responses (200, 400, 401, 403, 404, 500)
+public class UserController {
+    
+    @GetMapping
+    @ApiPageable // Documents pageable parameters (page, size, sort)
+    public ResponseEntity<ApiResponse<PageResponse<UserDTO>>> getUsers(Pageable pageable) {
+        // Implementation
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUser(@PathVariable Long id) {
+        // Implementation
+    }
+}
+```
+
+#### API Versioning
+
+```java
+@RestController
+@RequestMapping("/api/v1/users")
+@ApiVersion("v1") // Tags the API with a version
+public class UserControllerV1 {
+    // Implementation
+}
+
+@RestController
+@RequestMapping("/api/v2/users")
+@ApiVersion("v2") // Tags the API with a version
+public class UserControllerV2 {
+    // Implementation
+}
+```
+
+## 📄 Logging
+
+The starter kit provides enterprise-grade logging:
+
+### MDC Context
+
+The MDC filter automatically adds the following to your logging context:
+
+- Request ID - Unique identifier for each request
+- User ID - Authenticated user identifier (when available)
+- Session ID - HTTP session identifier
+- Client IP - Originating IP address
+
+### Request/Response Logging
+
+The request logging filter logs:
+
+- Request method, URI, and query parameters
+- Request headers (optional)
+- Request body (optional)
+- Response status and timing
+- Response headers (optional)
+- Response body (optional)
+
+### Customizing Logging
+
+1. Configure log levels in `application.yml`:
+
+```yaml
+logging:
+  level:
+    com.bensamir.starter: DEBUG  # Set the log level for starter kit components
+    your.package: INFO           # Set the log level for your components
+```
+
+2. Use the MDC context in your service classes:
+
+```java
+@Service
+public class UserService {
+    
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    
+    public void createUser(UserDTO userDTO) {
+        // MDC context (request ID, user ID, etc.) is automatically available
+        log.info("Creating user with email: {}", userDTO.getEmail());
+        // Implementation
+        log.info("User created successfully");
+    }
+}
+```
+
+## 📚 Examples
+
+### Complete Controller Example
+
+```java
+@RestController
+@RequestMapping("/api/users")
+@ApiResponseWrapper
+public class UserController {
+    
+    private final UserService userService;
+    
+    @GetMapping
+    @ApiPageable
+    public ResponseEntity<ApiResponse<PageResponse<UserDTO>>> getUsers(Pageable pageable) {
+        Page<UserDTO> users = userService.findAll(pageable);
+        return ResponseEntityBuilder.page(users);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUser(@PathVariable Long id) {
+        try {
+            UserDTO user = userService.findById(id);
+            return ResponseEntityBuilder.success(user);
+        } catch (ResourceNotFoundException e) {
+            // No need to catch this exception as it's handled globally
+            throw e;
+        }
+    }
+    
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserDTO>> createUser(
+            @Valid @RequestBody UserDTO userDTO, 
+            BindingResult bindingResult) {
+        
+        // Validation errors are handled by the global exception handler
+        UserDTO created = userService.create(userDTO);
+        return ResponseEntityBuilder.created(created);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(
+            @PathVariable Long id, 
+            @Valid @RequestBody UserDTO userDTO) {
+        
+        UserDTO updated = userService.update(id, userDTO);
+        return ResponseEntityBuilder.success(updated);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntityBuilder.noContent();
+    }
+}
+```
+
+### Service Example
+
+```java
+@Service
+@Transactional
+public class UserServiceImpl implements UserService {
+    
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    
+    @Override
+    public UserDTO findById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    }
+    
+    @Override
+    public Page<UserDTO> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(userMapper::toDto);
+    }
+    
+    @Override
+    public UserDTO create(UserDTO userDTO) {
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new ConflictException("User already exists with email: " + userDTO.getEmail());
+        }
+        
+        User user = userMapper.toEntity(userDTO);
+        User saved = userRepository.save(user);
+        return userMapper.toDto(saved);
+    }
+    
+    @Override
+    public UserDTO update(Long id, UserDTO userDTO) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User", "id", id);
+        }
+        
+        User user = userMapper.toEntity(userDTO);
+        user.setId(id);
+        User saved = userRepository.save(user);
+        return userMapper.toDto(saved);
+    }
+    
+    @Override
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User", "id", id);
+        }
+        
+        userRepository.deleteById(id);
+    }
+}
+```
+
+### Entity Example
 
 ```java
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements SecuredUser {
+public class User extends BaseEntity {
+    
+    @Column(nullable = false)
+    private String firstName;
+    
+    @Column(nullable = false)
+    private String lastName;
     
     @Column(nullable = false, unique = true)
     private String email;
@@ -356,433 +698,28 @@ public class User extends BaseEntity implements SecuredUser {
     @Column(nullable = false)
     private String password;
     
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles = new HashSet<>();
-    
-    @Column(nullable = false)
-    private boolean enabled = true;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
     
     // Getters and setters
-    
-    @Override
-    public String getId() {
-        return this.getId().toString();
-    }
-    
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-    
-    @Override
-    public Set<String> getRoles() {
-        return this.roles;
-    }
-    
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
 }
 ```
 
-2. Implement a `SecurityUserService`:
+## 🤝 Contributing
 
-```java
-@Service
-public class CustomUserService implements SecurityUserService {
-    
-    private final UserRepository userRepository;
-    
-    public CustomUserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
-        
-        return UserPrincipal.from(user);
-    }
-    
-    @Override
-    public UserDetails loadUserById(String id) throws UsernameNotFoundException {
-        User user = userRepository.findById(Long.parseLong(id))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-        
-        return UserPrincipal.from(user);
-    }
-}
-```
-
-3. Use security annotations to protect resources:
-
-```java
-@RestController
-@RequestMapping("/api/admin")
-public class AdminController {
-    
-    @GetMapping("/users")
-    @RequiresAdmin
-    public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers() {
-        // Only accessible to users with ADMIN role
-        List<UserDto> users = userService.findAll();
-        return ResponseEntityBuilder.success(users);
-    }
-}
-
-@RestController
-@RequestMapping("/api/user")
-public class ProfileController {
-    
-    @GetMapping("/profile")
-    @RequiresUser
-    public ResponseEntity<ApiResponse<UserDto>> getCurrentUser(Authentication authentication) {
-        // Accessible to users with USER role
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        UserDto userDto = userService.findById(userPrincipal.getId());
-        return ResponseEntityBuilder.success(userDto);
-    }
-}
-```
-
-4. Authentication endpoints:
-
-The security module provides these authentication endpoints:
-
-- **Login**: `POST /api/auth/login`
-  ```json
-  {
-    "username": "user@example.com",
-    "password": "password"
-  }
-  ```
-
-- **Refresh Token**: `POST /api/auth/refresh`
-  ```json
-  {
-    "refreshToken": "your-refresh-token"
-  }
-  ```
-
-These endpoints return a response with access and refresh tokens:
-
-```json
-{
-  "success": true,
-  "data": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expiresIn": 1621436800000
-  },
-  "timestamp": "2023-05-20T10:30:45Z"
-}
-```
-
-### Base Controllers
-
-1. Create a service implementation that extends `JpaCrudService`:
-
-```java
-@Service
-public class ProductService extends JpaCrudService<Product, Long> {
-    
-    private final ProductRepository productRepository;
-    
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-    
-    @Override
-    protected JpaRepository<Product, Long> getRepository() {
-        return productRepository;
-    }
-    
-    // Add custom service methods here
-}
-```
-
-2. Create a mapper for converting between entities and DTOs:
-
-```java
-@Component
-public class ProductMapper implements EntityMapper<Product, ProductDto> {
-    
-    @Override
-    public ProductDto toDto(Product entity) {
-        ProductDto dto = new ProductDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setPrice(entity.getPrice());
-        dto.setDescription(entity.getDescription());
-        return dto;
-    }
-    
-    @Override
-    public Product toEntity(ProductDto dto) {
-        Product entity = new Product();
-        entity.setName(dto.getName());
-        entity.setPrice(dto.getPrice());
-        entity.setDescription(dto.getDescription());
-        return entity;
-    }
-    
-    @Override
-    public List<ProductDto> toDtoList(List<Product> entities) {
-        return entities.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
-    
-    @Override
-    public Product updateEntityFromDto(ProductDto dto, Product entity) {
-        entity.setName(dto.getName());
-        entity.setPrice(dto.getPrice());
-        entity.setDescription(dto.getDescription());
-        return entity;
-    }
-}
-```
-
-3. Create a controller that extends `BaseCrudController`:
-
-```java
-@RestController
-@RequestMapping("/api/products")
-public class ProductController extends BaseCrudController<Product, ProductDto, Long> {
-    
-    private final ProductService productService;
-    private final ProductMapper productMapper;
-    
-    public ProductController(ProductService productService, ProductMapper productMapper) {
-        this.productService = productService;
-        this.productMapper = productMapper;
-    }
-    
-    @Override
-    protected CrudService<Product, Long> getService() {
-        return productService;
-    }
-    
-    @Override
-    protected EntityMapper<Product, ProductDto> getMapper() {
-        return productMapper;
-    }
-    
-    @Override
-    protected String getEntityName() {
-        return "Product";
-    }
-    
-    // Add custom controller methods here
-}
-```
-
-4. For simpler controllers, use the `SimplifiedCrudController`:
-
-```java
-@RestController
-@RequestMapping("/api/products")
-public class ProductController extends SimplifiedCrudController<Product, ProductDto, Long> {
-    
-    private final ProductService productService;
-    
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-    
-    @Override
-    protected CrudService<Product, Long> getService() {
-        return productService;
-    }
-    
-    // That's it! No mapper needed - it's auto-detected and created
-}
-```
-
-### API Documentation
-
-1. Document your controllers with OpenAPI annotations:
-
-```java
-@RestController
-@RequestMapping("/api/products")
-@Tag(name = "Products", description = "Product management API")
-public class ProductController extends BaseCrudController<Product, ProductDto, Long> {
-    
-    @Override
-    @Operation(summary = "Get product by ID", description = "Retrieves a product by its ID")
-    @ApiResponseWrapper
-    public ResponseEntity<ApiResponse<ProductDto>> findById(@PathVariable Long id) {
-        return super.findById(id);
-    }
-    
-    @Override
-    @Operation(summary = "Get all products", description = "Retrieves a paginated list of products")
-    @ApiPageable
-    @ApiResponseWrapper
-    public ResponseEntity<ApiResponse<PageResponse<ProductDto>>> findAll(Pageable pageable) {
-        return super.findAll(pageable);
-    }
-    
-    // Other methods...
-}
-```
-
-2. Access the API documentation:
-
-- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
-- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
-
-### Logging
-
-1. Use the `@LogExecution` annotation to log method entry and exit:
-
-```java
-@Service
-public class ProductService extends JpaCrudService<Product, Long> {
-    
-    @LogExecution
-    public Product findById(Long id) {
-        // Method execution will be logged with parameters and return value
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-    }
-    
-    @LogExecution(logParameters = false, logReturnValue = false)
-    public void deleteProduct(Long id) {
-        // Only method entry and exit will be logged, without parameters
-        productRepository.deleteById(id);
-    }
-}
-```
-
-2. Access context information in logs:
-
-```java
-@Service
-public class UserService {
-    
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
-    
-    @LogExecution
-    public User authenticateUser(String username, String password) {
-        // The request ID and other MDC values will automatically be included in the log
-        logger.info("Authenticating user: {}", username);
-        
-        // ... authentication logic
-        
-        return user;
-    }
-}
-```
-
-## Extending the Starter Kit
-
-### Creating Custom Exception Handlers
-
-You can add your own exception handlers by creating a class with `@ControllerAdvice` and implementing `@ExceptionHandler` methods:
-
-```java
-@ControllerAdvice
-public class CustomExceptionHandler {
-    
-    @ExceptionHandler(PaymentFailedException.class)
-    public ResponseEntity<ApiError> handlePaymentFailedException(
-            PaymentFailedException ex, HttpServletRequest request) {
-        
-        ApiError apiError = new ApiError();
-        apiError.setStatus(HttpStatus.BAD_GATEWAY.value());
-        apiError.setErrorCode("PAYMENT_FAILED");
-        apiError.setError("Payment Gateway Error");
-        apiError.setMessage(ex.getMessage());
-        apiError.setPath(request.getRequestURI());
-        
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_GATEWAY);
-    }
-}
-```
-
-### Overriding Auto-Configuration
-
-You can override any auto-configured bean by defining your own bean with the same name:
-
-```java
-@Configuration
-public class CustomConfig {
-    
-    @Bean
-    public GlobalExceptionHandler globalExceptionHandler(
-            StarterKitProperties properties,
-            ErrorMessageResolver messageResolver) {
-        return new CustomGlobalExceptionHandler(properties, messageResolver);
-    }
-}
-```
-
-### Custom Entity Mappers
-
-For complex mapping scenarios, you can use MapStruct:
-
-```java
-@Mapper(componentModel = "spring")
-public interface ProductMapper extends BaseMapStructMapper<Product, ProductDto> {
-    // MapStruct automatically implements all methods
-    
-    // Add custom mappings for complex cases
-    @Mapping(target = "categoryName", source = "category.name")
-    @Mapping(target = "tagsCount", expression = "java(product.getTags().size())")
-    ProductDto toDto(Product product);
-    
-    // For nested objects
-    @Mapping(target = "category", ignore = true)
-    Product toEntity(ProductDto dto);
-    
-    // Custom methods for complex mappings
-    default void mapCategory(ProductDto dto, @MappingTarget Product product) {
-        if (dto.getCategoryId() != null) {
-            Category category = new Category();
-            category.setId(dto.getCategoryId());
-            product.setCategory(category);
-        }
-    }
-}
-```
-
-## Roadmap
-
-### Future Components
-
-1. **Advanced Caching Support** (Q3 2025)
-    - Multi-level cache configuration
-    - Cache key generation
-    - TTL management
-    - Cache invalidation strategies
-
-2. **Event Publishing** (Q4 2025)
-    - Domain event publishing
-    - Event listeners and handlers
-    - Asynchronous event processing
-
-3. **Integration Testing Support** (Q1 2026)
-    - Test utilities and helpers
-    - In-memory database configuration
-    - Mock service implementations
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute, please:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
-2. Create a feature branch
-3. Add your changes
-4. Submit a pull request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-For major changes, please open an issue first to discuss what you would like to change.
+## 📄 License
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
